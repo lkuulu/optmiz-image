@@ -1,0 +1,22 @@
+{
+    "require": {
+        "symfony/filesystem": "^3.2",
+        "symfony/http-foundation": "^3.2",
+        "silex/silex": "^2.0",
+        "symfony/twig-bridge": "^3.2",
+        "wyrihaximus/sli-fly": "^3.0",
+        "symfony/debug": "^3.2",
+        "symfony/monolog-bridge": "^3.2",
+        "symfony/asset": "^3.2"
+
+    },
+    "autoload": {
+        "psr-0": {
+            "App": "src" 
+        },
+        "psr-4": {
+            "STHImage\\": "src/ImageBundle",
+            "STHCommon\\": "src/STHCommon"
+        }
+    }
+}

@@ -68,7 +68,6 @@ class ImageRenderer
         // Pattern will be "cache"/<pathtofile>/<preset>/<width>/<Density>/<webpOrNot>
         $cacheDir = self::CACHE . "/$pathToFile/$preset/$width/$screenDensity/";
         $cacheFile = $cacheDir . $acceptedContentType;
-//        $app['monolog']->debug($cacheFile);
         //$debug=1;
         if (!file_exists($cacheFile) || $gen || isset($debug)) {
 
@@ -96,13 +95,10 @@ class ImageRenderer
             $imageCropRatio = $metasData->getCropRatio();
             $imagePoi = $metasData->getPoi();
 
-
             // if parameter "width" is not present, set same width than original image
             if ($width == 'same') $width = $imageW;
 
-
             $coordinates = (object)$this->getCropCoordinates($preset, $imageW, $imageH, $imageCropRatio, $imagePoi);
-
 
             $dst_im = $this->getFinalImage($im, $width, $coordinates, $screenDensity);
 
@@ -112,10 +108,8 @@ class ImageRenderer
             imagedestroy($dst_im);
         }
 
-
         return $this->serveImageResponse($cacheFile, "$pathToFile.p$preset-w$width-d$screenDensity.$acceptedContentType", "image/$acceptedContentType");
     }
-
 
     /**
      * @param $cacheFile
@@ -197,7 +191,6 @@ class ImageRenderer
      */
     private function getCropCoordinates($preset, $imageW, $imageH, $imageCropRatio, $imagePoi)
     {
-
         // many manipulations
         // #DONE : cropping : center
         // #DONE : resizing : match preset take care of retina screen multiplier (preset in path)
@@ -205,7 +198,6 @@ class ImageRenderer
         // #DONE : cropping : center point of interest
 
         $ratio = (isset(self::PRESETS[$preset])) ? self::PRESETS[$preset] : ['w' => $imageW, 'h' => $imageH];
-
 
         if (!$imageCropRatio && !$imagePoi) {
             return ['x' => 0, 'y' => 0, 'cx' => $imageW, 'cy' => $imageH];
@@ -220,7 +212,7 @@ class ImageRenderer
                 $y = 0;
                 $cx = $imageW;
                 $cy = $imageH;
-            } elseif (isset($cropRatio[$preset])) {
+            } elseif (isset($imageCropRatio[$preset])) {
                 // use ratio stored in the image iptc comment json
                 $cx = $imageCropRatio[$preset]['w'];
                 $x = $imageCropRatio[$preset]['x'];
@@ -255,15 +247,12 @@ class ImageRenderer
                         $x = $imagePoi['x'] - ($cx / 2);
                     }
                 } else {
-
                     // minimum cropping is not possible due to proximity of poi coordinates and image edges
                     return $this->centerCrop($imageW, $imageH, $ratio);
                 }
             } else {
-                // center crop
                 return $this->centerCrop($imageW, $imageH, $ratio);
             }
-
             return ['x' => $x, 'y' => $y, 'cx' => $cx, 'cy' => $cy];
         }
     }
